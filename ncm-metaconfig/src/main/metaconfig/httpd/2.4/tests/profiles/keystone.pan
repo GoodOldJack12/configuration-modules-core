@@ -27,13 +27,13 @@ prefix "contents";
                 "type", "error",
                 "expr", "%{cu}t %M",
                 "name", "", # must be empty
-                )),
+            )),
             "error", "/var/log/httpd/keystone.log",
             "custom", list(dict(
                 "location", "/var/log/httpd/keystone_access.log",
                 "name", "combined",
-                )),
-            ),
+            )),
+        ),
         "wsgi", dict(
             "passauthorization", "on",
             "processgroup", "keystone-public",
@@ -46,19 +46,19 @@ prefix "contents";
                     "user", "keystone",
                     "group", "keystone",
                     "display-name", "%{GROUP}",
-                    ),
                 ),
             ),
+        ),
         "aliases", list(dict(
             "url", "/",
             "destination", "/usr/bin/keystone-wsgi-public",
             "type", "wsgiscript",
-            )),
+        )),
         "directories", list(dict(
             "name", "/usr/bin",
             "authz", list(dict("all", "granted")),
-            )),
-        );
+        )),
+    );
     SELF['keystone'] = clone(data);
 
     data['port'] = 35357;
@@ -79,12 +79,13 @@ prefix "contents";
             "passauthorization", "on",
             "processgroup", "keystone-public",
             "applicationgroup", "%{GLOBAL}",
-            ),
-        );
+        ),
+    );
     append(clone(data));
 
     data['name'] = "/identity_admin";
     data['wsgi']['processgroup'] = "keystone-admin";
+    data["casscope"] = "/";
     append(data);
 
     SELF;
